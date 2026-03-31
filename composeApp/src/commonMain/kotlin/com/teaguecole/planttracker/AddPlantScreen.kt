@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 /**
  * Screen for adding a new plant.
@@ -41,8 +40,8 @@ fun AddPlantScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(AppDimens.spacingLg),
+        verticalArrangement = Arrangement.spacedBy(AppDimens.spacingSm)
     ) {
         OutlinedTextField(
             value = name,
@@ -57,7 +56,7 @@ fun AddPlantScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(AppDimens.spacingLg))
 
         Button(
             onClick = {
@@ -78,7 +77,7 @@ fun AddPlantScreen(
             Text("Save Plant")
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(AppDimens.spacingSm))
 
         Button(
             onClick = onCancel,

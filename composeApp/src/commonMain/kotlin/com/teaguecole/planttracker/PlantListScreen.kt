@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 /**
  * Main screen showing the list of plants.
@@ -29,8 +28,8 @@ fun PlantListScreen(plants: List<Plant>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(AppDimens.spacingLg),
+        verticalArrangement = Arrangement.spacedBy(AppDimens.spacingMd)
     ) {
         // "items" takes a list and creates a composable for each entry.
         // "key" helps Compose track which items moved/changed for efficient updates.
@@ -47,11 +46,11 @@ fun PlantListScreen(plants: List<Plant>) {
 fun PlantCard(plant: Plant) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = AppDimens.elevationSm)
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(AppDimens.spacingLg)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
