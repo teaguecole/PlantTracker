@@ -1,0 +1,28 @@
+-- SQLDelight reads this file and generates:
+-- 1. A Kotlin data class matching the CREATE TABLE columns
+-- 2. Type-safe functions for each named query below
+--
+-- The generated code lives in com.teaguecole.planttracker.db
+-- You never edit it directly — change this .sq file and rebuild.
+
+CREATE TABLE PlantEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    location TEXT NOT NULL,
+    photoUri TEXT,
+    lastWateredDate INTEGER,
+    wateringIntervalDays INTEGER NOT NULL DEFAULT 7
+);
+
+getAllPlants:
+SELECT * FROM PlantEntity;
+
+getPlantById:
+SELECT * FROM PlantEntity WHERE id = ?;
+
+insertPlant:
+INSERT OR REPLACE INTO PlantEntity(id, name, location, photoUri, lastWateredDate, wateringIntervalDays)
+VALUES (?, ?, ?, ?, ?, ?);
+
+deletePlant:
+DELETE FROM PlantEntity WHERE id = ?;
