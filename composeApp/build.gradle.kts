@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.sqldelight.coroutines)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.peekaboo.image.picker)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

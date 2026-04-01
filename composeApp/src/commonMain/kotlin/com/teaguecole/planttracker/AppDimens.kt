@@ -26,4 +26,7 @@ object AppDimens {
 
     // Elevation
     val elevationSm = 2.dp
+
+    //Image Placeholder
+    val imageThumbnail = 64.dp
 }
