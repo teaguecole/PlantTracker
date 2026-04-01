@@ -24,5 +24,8 @@ insertPlant:
 INSERT OR REPLACE INTO PlantEntity(id, name, location, photoUri, lastWateredDate, wateringIntervalDays)
 VALUES (?, ?, ?, ?, ?, ?);
 
+markAsWatered:
+UPDATE PlantEntity SET lastWateredDate = ? WHERE id = ?;
+
 deletePlant:
 DELETE FROM PlantEntity WHERE id = ?;

@@ -71,7 +71,19 @@ fun App() {
                         onCancel = { showAddScreen = false }
                     )
                 } else {
-                    PlantListScreen(plants = plants)
+                    PlantListScreen(
+                        plants = plants,
+                        onWaterPlant = { plant ->
+                            repository.markAsWatered(plant.id)
+                            // Update the in-memory list so the UI reflects the change.
+                            // We find the plant's index and replace it with an updated copy.
+                            val index = plants.indexOfFirst { it.id == plant.id }
+                            if (index != -1) {
+                                val now = kotlin.time.Clock.System.now().toEpochMilliseconds()
+                                plants[index] = plant.copy(lastWateredDate = now)
+                            }
+                        }
+                    )
                 }
             }
         }

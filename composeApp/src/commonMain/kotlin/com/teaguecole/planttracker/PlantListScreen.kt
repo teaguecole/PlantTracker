@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +17,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Main screen showing the list of plants.
@@ -23,7 +27,7 @@ import androidx.compose.ui.Modifier
  * Compose Multiplatform handles rendering natively on each platform.
  */
 @Composable
-fun PlantListScreen(plants: List<Plant>) {
+fun PlantListScreen(plants: List<Plant>, onWaterPlant: (Plant) -> Unit) {
     // LazyColumn = scrollable list that only renders visible items (like RecyclerView)
     LazyColumn(
         modifier = Modifier
@@ -34,16 +38,16 @@ fun PlantListScreen(plants: List<Plant>) {
         // "items" takes a list and creates a composable for each entry.
         // "key" helps Compose track which items moved/changed for efficient updates.
         items(items = plants, key = { it.id }) { plant ->
-            PlantCard(plant)
+            PlantCard(plant, onWater = { onWaterPlant(plant) })
         }
     }
 }
 
 /**
- * A card displaying a single plant's info.
+ * A card displaying a single plant's info with a water button.
  */
 @Composable
-fun PlantCard(plant: Plant) {
+fun PlantCard(plant: Plant, onWater: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = AppDimens.elevationSm)
@@ -55,14 +59,45 @@ fun PlantCard(plant: Plant) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = plant.name,
-                    style = MaterialTheme.typography.titleMedium)
+                    style = MaterialTheme.typography.titleMedium
+                )
                 Text(
                     text = plant.location,
-                    style = MaterialTheme.typography.bodyMedium)
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = formatLastWatered(plant.lastWateredDate),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Button(
+                onClick = onWater,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            ) {
+                Text("Water")
             }
         }
     }
+}
+
+/**
+ * Formats a timestamp (epoch millis) into a readable date string.
+ * Returns "Never watered" if null.
+ */
+private fun formatLastWatered(epochMillis: Long?): String {
+    if (epochMillis == null) return "Never watered"
+
+    // KMP note: kotlinx-datetime gives us cross-platform date/time handling.
+    // On Android you might reach for java.time, but that doesn't exist on iOS.
+    // Instant = a point in time. We convert it to a local date for display.
+    val instant = kotlinx.datetime.Instant.fromEpochMilliseconds(epochMillis)
+    val localDate = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    return "Watered: ${localDate.month.name.lowercase().replaceFirstChar { it.uppercase() }} ${localDate.dayOfMonth}, ${localDate.year}"
 }

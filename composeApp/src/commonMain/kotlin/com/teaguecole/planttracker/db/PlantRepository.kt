@@ -37,6 +37,14 @@ class PlantRepository(private val database: PlantDatabase) {
         )
     }
 
+    fun markAsWatered(id: String) {
+        // Clock.System is from kotlinx-datetime — a KMP library that gives you
+        // cross-platform time. toEpochMilliseconds() stores it as a Long (which
+        // is what our database column expects via INTEGER type).
+        val now = kotlin.time.Clock.System.now().toEpochMilliseconds()
+        queries.markAsWatered(lastWateredDate = now, id = id)
+    }
+
     fun deletePlant(id: String) {
         queries.deletePlant(id)
     }
